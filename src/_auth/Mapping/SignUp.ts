@@ -1,0 +1,45 @@
+import { Iform } from "../../models/types/Forms";
+
+export  const SignUpFormInputs:Array<Iform> = [
+    {
+      label: "Nombre de usuario",
+      type: "",
+      maxLength: 100,
+      disabled: false,
+      placeHolder: "Ingrese su nombre de usuario",
+      required: true,
+      valueName: "UserName",
+      width: "32",
+      height: "10",
+    },
+    {
+      label: "Correo electronico",
+      type: "email",
+      disabled: false,
+      placeHolder: "Ingrese su Correo electronico",
+      required: true,
+      valueName: "UserEmail",
+      width: "32",
+      height: "10",
+    },{
+        label: "Contraseña",
+        type: "password",
+        maxLength: 50,
+        minLength: 8,
+        disabled: false,
+        placeHolder: "Ingrese su contraseña",
+        required: true,
+        valueName: "password",
+        width: "32",
+        height: "10",
+      },
+      {
+        label: "Fecha de nacimiento",
+        type: "date",
+        disabled: false,
+        required: true,
+        valueName: "BirthDate",
+        width: "32",
+        height: "10",
+      },
+];
