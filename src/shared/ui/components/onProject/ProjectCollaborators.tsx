@@ -9,17 +9,19 @@ import IconButton from "../buttons/IconButton";
 import DefaultColaboratorContainer from "../../containers/DefaultUserContainer";
 import AddColaboratorForm from "../../forms/AddColaboratorForm";
 import { useUserInProjectContext } from "../../../context/UseOnProjectContext";
+import LoadingScreen from "../../containers/LoadingScreen";
 
 export default function ProjectCollaborators() {
   const [users, setUsers] = useState<Array<ProjectUser>>([]);
   const [openForm, setOpenForm] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const projectData = useParams<{ projectId: string }>();
   const [isProjectAdmin, setIsProjectAdmin] = useState<boolean>(false);
   const { userInProject } = useUserInProjectContext();
 
   const handleForm = () => {
-    setOpenForm(prev => !prev)
-  }
+    setOpenForm((prev) => !prev);
+  };
 
   const getUsers = async (): Promise<void> => {
     try {
@@ -32,6 +34,8 @@ export default function ProjectCollaborators() {
       if (error instanceof Error) {
         toast.error(error.message);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -40,28 +44,36 @@ export default function ProjectCollaborators() {
   }, [projectData.projectId]);
 
   useEffect(() => {
-    setIsProjectAdmin(userInProject.userRole == 'creator' || userInProject.userRole == 'admin');
+    setIsProjectAdmin(
+      userInProject.userRole == "creator" || userInProject.userRole == "admin"
+    );
   }, [users, userInProject.userId]);
 
   return (
     <div className="w-full h-full">
-      <div className="flex w-full h-full">
-      {isProjectAdmin && (
-        <IconButton
-          Icon={openForm? Cancel : Add}
-          Text={openForm? "Cancelar" : "Agregar Colaboradores"}
-          onClick={handleForm}
-        />
+      {isLoading ? (
+        <LoadingScreen />
+      ) : (
+        <>
+          <div className="flex w-full h-full">
+            {isProjectAdmin && (
+              <IconButton
+                Icon={openForm ? Cancel : Add}
+                Text={openForm ? "Cancelar" : "Agregar Colaboradores"}
+                onClick={handleForm}
+              />
+            )}
+          </div>
+          {openForm && <AddColaboratorForm />}
+          <div className="secondary-gradient w-full p-4 overflow-auto max-h-32 rounded-md mt-2">
+            {users.map((current: ProjectUser) => (
+              <div key={current.userId} className="flex flex-col w-full">
+                <DefaultColaboratorContainer user={current} ShowConfigIcon />
+              </div>
+            ))}
+          </div>
+        </>
       )}
-      </div>
-      {openForm && <AddColaboratorForm />}
-      <div className="secondary-gradient w-full p-4 overflow-auto max-h-32 rounded-md mt-2">
-      {users.map((current: ProjectUser) => (
-        <div key={current.userId} className="flex flex-col w-full">
-          <DefaultColaboratorContainer user={current}  ShowConfigIcon  />
-        </div>
-      ))}
-      </div>
     </div>
   );
 }

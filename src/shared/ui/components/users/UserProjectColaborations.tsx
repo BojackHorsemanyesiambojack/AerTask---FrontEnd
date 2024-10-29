@@ -4,11 +4,13 @@ import { Project } from "../../../../models/types/Project";
 import Projects from "../../../../utils/projects/Projects";
 import toast from "react-hot-toast";
 import ProjectContainerInfo from "../../containers/ProjectContainerInfo";
+import LoadingScreen from "../../containers/LoadingScreen";
 
 export default function UserProjectColaborations({Limit, refresh} : {Limit:number, refresh?:boolean}) {
   const { userId } = useParams<{ userId: string }>();
   const [error, setError] = useState<string>("");
   const [projects, setProjects] = useState<Array<Project>>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const initialGet = async () => {
     try {
@@ -23,7 +25,7 @@ export default function UserProjectColaborations({Limit, refresh} : {Limit:numbe
       if (error instanceof Error) {
         toast.error(error.message);
       }
-    }
+    }finally{setIsLoading(false);}
   };
 
   useEffect(() => {
@@ -32,7 +34,12 @@ export default function UserProjectColaborations({Limit, refresh} : {Limit:numbe
 
   return (
     <div className="secondary-gradient border border-zinc-800 rounded-sm p-10 my-6 w-full">
-      {projects.length === 0 ? (
+      {isLoading?
+      (<LoadingScreen />)
+      :
+      (
+        <>
+        {projects.length === 0 ? (
         <p className="text-lg font-semibold">Sin Proyectos</p>
       ) : (
         <div className="flex flex-col gap-6">
@@ -41,6 +48,9 @@ export default function UserProjectColaborations({Limit, refresh} : {Limit:numbe
           ))}
         </div>
       )}
+        </>
+      )
+    }
     </div>
   );
 }

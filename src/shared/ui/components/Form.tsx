@@ -2,6 +2,7 @@ import { ChangeEventHandler, FormEventHandler, useEffect, useState } from "react
 import { Iform } from "../../../models/types/Forms";
 import { ClipLoader } from "react-spinners";
 import FaDarkButton from "./buttons/FaDarkButton";
+import { Hourglass } from "react-loader-spinner";
 
 export default function Form({
   Action,
@@ -101,7 +102,9 @@ export default function Form({
       ))}
       {GenError && <p className="text-red-500">{GenError}</p>}
       {isLoading ? (
-        <ClipLoader color="#36D7B7" />
+        <div className="w-full flex items-center justify-center">
+          <Hourglass height={32} width={32} />
+        </div>
       ) : (
         <FaDarkButton color={SubmitColor} text={SubmitTextColor}>
           <input type="submit" value={SubmitText} />

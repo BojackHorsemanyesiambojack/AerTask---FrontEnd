@@ -4,11 +4,14 @@ import Projects from "../../../../utils/projects/Projects";
 import toast from "react-hot-toast";
 import { Project } from "../../../../models/types/Project";
 import ProjectContainerInfo from "../../containers/ProjectContainerInfo";
+import { Hourglass } from "react-loader-spinner";
+import LoadingScreen from "../../containers/LoadingScreen";
 
 export default function UserProjects({Limit, refresh} : {Limit:number | undefined | null, refresh:boolean}) {
   const { userId } = useParams<{ userId: string }>();
   const [error, setError] = useState<string>("");
   const [projects, setProjects] = useState<Array<Project>>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const initialGet = async () => {
     try {
@@ -23,7 +26,7 @@ export default function UserProjects({Limit, refresh} : {Limit:number | undefine
       if (error instanceof Error) {
         toast.error(error.message);
       }
-    }
+    }finally{setIsLoading(false);}
   };
 
   useEffect(() => {
@@ -32,6 +35,12 @@ export default function UserProjects({Limit, refresh} : {Limit:number | undefine
 
   return (
     <div className="secondary-gradient border border-zinc-800 rounded-sm p-10 my-6 w-full">
+      {isLoading?
+      (<>
+      <LoadingScreen />
+      </>)
+      :
+      (<>
       {projects.length === 0 ? (
         <p className="text-lg font-semibold">Sin Proyectos</p>
       ) : (
@@ -41,6 +50,8 @@ export default function UserProjects({Limit, refresh} : {Limit:number | undefine
           ))}
         </div>
       )}
+      </>)
+      }
     </div>
   );
 }

@@ -21,4 +21,12 @@ const validateSesion = async() => {
     }
 }
 
-export default { getAndValidateSesion };
+const deleteSesion = async() => {
+    try{
+        await fetches.defaultDeleteWithCredentials(routes.deleteSessionRoute);
+    }catch(error){
+        throw error;
+    }
+}
+
+export default { getAndValidateSesion, deleteSesion };

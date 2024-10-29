@@ -5,11 +5,13 @@ import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import IconButton from "../buttons/IconButton";
 import EditIcon from "../../../../assets/icons/HeroIcons/EditIcon";
+import LoadingScreen from "../../containers/LoadingScreen";
 
 export default function ProjectConfigInfo() {
   const [projectData, setProjectData] = useState<Project>(exampleProject);
   const [isChanged, setIsChanged] = useState<boolean>(false);
   const { projectId } = useParams<{ projectId: string }>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [initial, setInitialState] = useState<{
     title: string;
     desc: string | undefined;
@@ -30,6 +32,8 @@ export default function ProjectConfigInfo() {
       }
     } catch (error) {
       error instanceof Error && toast.error(error.message);
+    }finally{
+      setIsLoading(false);
     }
   };
 
@@ -60,7 +64,11 @@ export default function ProjectConfigInfo() {
   return (
     <>
       <h3 className="text-lg font-bold">Información del proyecto</h3>
-      <form className="w-3/4 rounded-md p-3 principal-gradient flex items-center justify-evenly border border-zinc-600 flex-col">
+      {isLoading?
+      (<LoadingScreen />)
+      :
+      (
+        <form className="w-3/4 rounded-md p-3 principal-gradient flex items-center justify-evenly border border-zinc-600 flex-col">
         <div className="flex w-full justify-evenly">
           <div className="flex flex-col items-center">
             <h4 className="text-md font-bold">Título</h4>
@@ -89,6 +97,8 @@ export default function ProjectConfigInfo() {
           disabled={!isChanged}
         />
       </form>
+      )
+    }
     </>
   );
 }

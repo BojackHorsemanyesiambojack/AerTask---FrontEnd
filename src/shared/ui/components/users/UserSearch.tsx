@@ -4,6 +4,7 @@ import { Hourglass } from "react-loader-spinner";
 import { User } from "../../../../models/types/Sesion";
 import auth from "../../../../utils/auth/auth";
 import DefaultColaboratorContainer from "../../containers/DefaultUserContainer";
+import LoadingScreen from "../../containers/LoadingScreen";
 
 export default function UserSearch({ setValue }: { setValue?: Function }) {
   const [query, setQuery] = useState<string>("");
@@ -54,23 +55,26 @@ export default function UserSearch({ setValue }: { setValue?: Function }) {
       />
       <div className="flex flex-col w-full justify-start">
         {isLoading ? (
-          <div className="flex justify-center items-center">
-            <Hourglass width={25} height={25} />
-            <h5 className="ml-3">Buscando usuarios...</h5>
-          </div>
+          <LoadingScreen />
         ) : users.length === 0 && onQuery ? (
           <div className="my-2">
-            <h5 className="text-zinc-600">No se han encontrado usuarios que coincidan con la búsqueda</h5>
+            <h5 className="text-zinc-600">
+              No se han encontrado usuarios que coincidan con la búsqueda
+            </h5>
           </div>
         ) : (
-          users.map((current: User) => (
-            <div onClick={setValue? () => setValue(current.userId) : () => {}}>
-              <DefaultColaboratorContainer
-                user={current}
-                key={current.userId}
-              />
-            </div>
-          ))
+          <div className="max-h-32 overflow-y-auto overflow-x-hidden">
+            {users.map((current: User) => (
+              <div
+                onClick={setValue ? () => setValue(current.userId) : () => {}}
+              >
+                <DefaultColaboratorContainer
+                  user={current}
+                  key={current.userId}
+                />
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>

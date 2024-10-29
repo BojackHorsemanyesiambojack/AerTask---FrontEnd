@@ -33,7 +33,7 @@ export const leftNavBarOptions: Array<IMenuMap> = [
     },
     {
         label: 'Sign Out',
-        linkTo: '',
+        linkTo: 'deletesession',
         icon: <SignOut />
     }
 ];

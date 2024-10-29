@@ -16,6 +16,7 @@ const getProjectTasksRoute = `${defaultRoute}tasks/getprojecttasks?ProjectId=`;
 const createProjectTaskRoute = `${defaultRoute}tasks/createprojecttask`;
 const deleteProjectTaskRoute = `${defaultRoute}tasks/deleteprojecttask`;
 const checkUserInProjectRoute = `${defaultRoute}projects/checkuser?ProjectId&UserId`
+const deleteSessionRoute = `${defaultRoute}sesions/deletesession`;
 
 
 export default {
@@ -36,5 +37,6 @@ export default {
   getProjectTasksRoute,
   createProjectTaskRoute,
   deleteProjectTaskRoute,
-  checkUserInProjectRoute
+  checkUserInProjectRoute,
+  deleteSessionRoute
 };
