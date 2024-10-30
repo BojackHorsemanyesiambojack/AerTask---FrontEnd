@@ -45,38 +45,37 @@ export default function UserSearch({ setValue }: { setValue?: Function }) {
   };
 
   return (
-    <div className="w-full h-1/2 rounded-md p-2 flex items-center justify-center flex-col">
-      <input
-        type="text"
-        className="bg-zinc-900 rounded-md p-1 font-semibold w-full"
-        value={query}
-        onChange={handleChange}
-        placeholder="Buscar usuario"
-      />
-      <div className="flex flex-col w-full justify-start">
-        {isLoading ? (
-          <LoadingScreen />
-        ) : users.length === 0 && onQuery ? (
-          <div className="my-2">
-            <h5 className="text-zinc-600">
-              No se han encontrado usuarios que coincidan con la búsqueda
-            </h5>
-          </div>
-        ) : (
-          <div className="max-h-32 overflow-y-auto overflow-x-hidden">
-            {users.map((current: User) => (
-              <div
-                onClick={setValue ? () => setValue(current.userId) : () => {}}
-              >
-                <DefaultColaboratorContainer
-                  user={current}
-                  key={current.userId}
-                />
-              </div>
-            ))}
-          </div>
-        )}
+    <div className="w-1/2 rounded-md py-2 flex flex-col items-center justify-center"> 
+  <input
+    type="text"
+    className="bg-zinc-900 rounded-md p-1 font-semibold w-full"
+    value={query}
+    onChange={handleChange}
+    placeholder="Buscar usuario"
+  />
+  <div className="flex flex-col w-full justify-start">
+    {isLoading ? (
+      <LoadingScreen />
+    ) : users.length === 0 && onQuery ? (
+      <div className="my-2">
+        <h5 className="text-zinc-600">
+          No se han encontrado usuarios que coincidan con la búsqueda
+        </h5>
       </div>
-    </div>
+    ) : (
+      <div className="h-32 w-full overflow-y-auto"> {/* Ajuste de la altura */}
+        {users.map((current: User) => (
+          <div
+            onClick={setValue ? () => setValue(current.userId) : () => {}}
+            key={current.userId} // Asegura el key en el div contenedor
+          >
+            <DefaultColaboratorContainer user={current} />
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</div>
+
   );
 }
